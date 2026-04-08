@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a4a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Masters 2026">
+<meta name="description" content="2026 Masters Tournament TV Schedule & Alerts">
+<title>2026 Masters Viewing Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a4a2e;
+    --green-mid: #2d6e46;
+    --green-light: #4a9e68;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #f8f4e8;
+    --cream-dark: #ede6d0;
+    --white: #ffffff;
+    --espn: #d00c1b;
+    --cbs: #0033a0;
+    --prime: #00a8e1;
+    --paramount: #0064ff;
+    --disney: #1c1c84;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--green);
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--cream);
+    min-height: 100vh;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(201,168,76,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(74,158,104,0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .page { max-width: 860px; margin: 0 auto; padding: 40px 20px 60px; position: relative; z-index: 1; }
+
+/* ALERT BANNER */
+#alert-banner {
+background: rgba(201,168,76,0.12);
+border: 1px solid rgba(201,168,76,0.35);
+border-radius: 14px;
+padding: 16px 20px;
+margin-bottom: 32px;
+display: flex;
+align-items: center;
+gap: 14px;
+flex-wrap: wrap;
+}
+#alert-banner .bell { font-size: 24px; flex-shrink: 0; }
+#alert-banner .banner-text { flex: 1; min-width: 180px; }
+#alert-banner .banner-text strong { color: var(–gold-light); display: block; font-size: 14px; margin-bottom: 3px; }
+#alert-banner .banner-text span { font-size: 12px; color: rgba(248,244,232,0.65); line-height: 1.5; }
+#enable-btn {
+background: var(–gold);
+color: #1a1a1a;
+border: none;
+border-radius: 20px;
+padding: 10px 20px;
+font-size: 13px;
+font-weight: 700;
+cursor: pointer;
+letter-spacing: 0.5px;
+white-space: nowrap;
+transition: background 0.2s, transform 0.1s;
+font-family: ‘Source Sans 3’, sans-serif;
+}
+#enable-btn:hover { background: var(–gold-light); transform: scale(1.03); }
+#enable-btn:disabled { background: rgba(201,168,76,0.3); color: rgba(248,244,232,0.5); cursor: default; transform: none; }
+#status-msg { font-size: 12px; color: var(–gold-light); margin-top: 6px; display: none; }
+
+/* iOS INSTALL HINT */
+#ios-hint {
+background: rgba(0,100,255,0.1);
+border: 1px solid rgba(0,100,255,0.3);
+border-radius: 12px;
+padding: 14px 18px;
+margin-bottom: 24px;
+font-size: 12.5px;
+color: rgba(248,244,232,0.8);
+line-height: 1.6;
+display: none;
+}
+#ios-hint strong { color: #7ab4ff; }
+
+/* HEADER */
+header { text-align: center; margin-bottom: 40px; }
+.subtitle { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(–gold); margin-bottom: 10px; }
+h1 { font-family: ‘Playfair Display’, serif; font-size: clamp(30px, 6vw, 52px); font-weight: 900; color: var(–white); line-height: 1.05; margin-bottom: 6px; }
+h1 span { color: var(–gold); }
+.header-rule { width: 80px; height: 2px; background: var(–gold); margin: 18px auto 16px; }
+.header-sub { font-size: 14px; color: rgba(248,244,232,0.7); letter-spacing: 1px; }
+
+/* LEGEND */
+.legend { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 40px; }
+.legend-item { display: flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 5px 12px 5px 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* DAY BLOCKS */
+.day-block { margin-bottom: 36px; animation: fadeUp 0.5s ease both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.day-block:nth-child(1){animation-delay:.1s} .day-block:nth-child(2){animation-delay:.2s}
+.day-block:nth-child(3){animation-delay:.3s} .day-block:nth-child(4){animation-delay:.4s}
+.day-block:nth-child(5){animation-delay:.5s}
+
+.day-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 12px; flex-wrap: wrap; }
+.day-name { font-family: ‘Playfair Display’, serif; font-size: 22px; font-weight: 700; color: var(–white); }
+.day-date { font-size: 12px; color: var(–gold); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+.day-badge { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 10px; font-weight: 700; margin-left: auto; }
+.badge-practice { background: rgba(201,168,76,0.2); color: var(–gold-light); border: 1px solid rgba(201,168,76,0.3); }
+.badge-round { background: rgba(74,158,104,0.2); color: #7dcfa0; border: 1px solid rgba(74,158,104,0.35); }
+
+/* TIMELINE */
+.timeline { position: relative; display: flex; flex-direction: column; gap: 5px; padding-left: 14px; }
+.timeline::before { content: ‘’; position: absolute; left: 0; top: 10px; bottom: 10px; width: 2px; background: linear-gradient(to bottom, var(–gold), rgba(201,168,76,0.2)); border-radius: 2px; }
+
+.segment { display: grid; grid-template-columns: 140px 1fr; align-items: center; gap: 14px; padding: 10px 14px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); transition: background 0.2s; position: relative; }
+.segment:hover { background: rgba(255,255,255,0.09); }
+.segment.primary { background: rgba(201,168,76,0.1); border-color: rgba(201,168,76,0.25); }
+.primary-flag { position: absolute; top: -1px; right: 10px; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(–gold); font-weight: 700; background: var(–green); padding: 0 6px; }
+
+/* UPCOMING highlight */
+.segment.upcoming { border-color: rgba(201,168,76,0.5); box-shadow: 0 0 0 1px rgba(201,168,76,0.2); }
+.segment.upcoming .time-col { color: var(–gold-light); }
+.live-badge { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: #d00c1b; color: #fff; border-radius: 4px; padding: 1px 6px; font-weight: 700; margin-left: 6px; animation: blink 1.2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+.switch-arrow { text-align: center; font-size: 11px; color: var(–gold); letter-spacing: 1px; padding: 3px 0; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; margin: -3px 0; }
+.switch-arrow::before, .switch-arrow::after { content: ‘’; flex: 1; height: 1px; background: rgba(201,168,76,0.3); }
+
+.time-col { font-size: 12.5px; font-weight: 600; color: var(–cream-dark); font-variant-numeric: tabular-nums; line-height: 1.3; }
+.time-col small { display: block; font-size: 10px; color: rgba(248,244,232,0.45); font-weight: 400; margin-top: 1px; text-transform: uppercase; letter-spacing: 0.5px; }
+.info-col { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.event-name { font-size: 14px; font-weight: 600; color: var(–white); flex: 1; min-width: 120px; }
+.channel-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.pill { font-size: 10.5px; font-weight: 700; letter-spacing: 0.6px; padding: 3px 9px; border-radius: 12px; white-space: nowrap; }
+.pill-espn    { background: rgba(208,12,27,0.85);  color: #fff; }
+.pill-cbs     { background: rgba(0,51,160,0.85);   color: #fff; }
+.pill-prime   { background: rgba(0,168,225,0.85);  color: #fff; }
+.pill-paramount { background: rgba(0,100,255,0.8); color: #fff; }
+.pill-masters { background: rgba(26,74,46,0.9); color: var(–gold-light); border: 1px solid rgba(201,168,76,0.5); }
+.pill-disney  { background: rgba(28,28,132,0.85);  color: #fff; }
+.pill-youtube { background: rgba(200,0,0,0.8);     color: #fff; }
+
+.day-divider { height: 1px; background: linear-gradient(to right, transparent, rgba(201,168,76,0.25), transparent); margin: 8px 0 36px; }
+.note { font-size: 12px; color: rgba(248,244,232,0.55); margin-top: 10px; padding-left: 14px; border-left: 2px solid rgba(201,168,76,0.3); line-height: 1.6; }
+
+/* ALERTS LIST */
+#alerts-section { margin-top: 48px; padding-top: 28px; border-top: 1px solid rgba(201,168,76,0.2); display: none; }
+#alerts-section h2 { font-family: ‘Playfair Display’, serif; font-size: 20px; color: var(–white); margin-bottom: 16px; }
+.alert-list { display: flex; flex-direction: column; gap: 8px; }
+.alert-item { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 10px 14px; font-size: 13px; }
+.alert-item.fired { opacity: 0.4; text-decoration: line-through; }
+.alert-time { color: var(–gold); font-weight: 700; font-variant-numeric: tabular-nums; min-width: 80px; font-size: 12px; }
+.alert-desc { flex: 1; color: var(–cream); }
+.alert-dot { width: 8px; height: 8px; border-radius: 50%; background: var(–gold); flex-shrink: 0; }
+.alert-item.fired .alert-dot { background: rgba(255,255,255,0.2); }
+
+footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(201,168,76,0.2); text-align: center; }
+footer p { font-size: 12px; color: rgba(248,244,232,0.45); line-height: 1.7; }
+footer strong { color: var(–gold); }
+
+@media (max-width: 540px) {
+.segment { grid-template-columns: 105px 1fr; gap: 10px; }
+.event-name { font-size: 12.5px; }
+h1 { font-size: 28px; }
+#alert-banner { flex-direction: column; text-align: center; }
+}
+</style>
+
+</head>
+<body>
+<div class="page">
+
+  <!-- iOS Install Hint -->
+
+  <div id="ios-hint">
+    📱 <strong>iPhone users:</strong> For alerts to work, tap the <strong>Share</strong> button in Safari, then <strong>"Add to Home Screen"</strong> — then open the app from your home screen icon before enabling alerts.
+  </div>
+
+  <!-- Alert Banner -->
+
+  <div id="alert-banner">
+    <div class="bell">🔔</div>
+    <div class="banner-text">
+      <strong>Never miss a channel switch</strong>
+      <span>Enable alerts and we'll notify you right before each broadcast starts so you know exactly where to tune.</span>
+      <div id="status-msg"></div>
+    </div>
+    <div>
+      <button id="enable-btn" onclick="enableAlerts()">Enable Alerts</button>
+    </div>
+  </div>
+
+  <header>
+    <p class="subtitle">Augusta National Golf Club</p>
+    <h1>2026 Masters<br><span>Viewing Guide</span></h1>
+    <div class="header-rule"></div>
+    <p class="header-sub">April 8–12 &nbsp;·&nbsp; All times Eastern</p>
+  </header>
+
+  <!-- Legend -->
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#d00c1b"></div>ESPN</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0033a0"></div>CBS</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00a8e1"></div>Prime Video</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0064ff"></div>Paramount+</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Masters.com / App</div>
+  </div>
+
+  <!-- WEDNESDAY -->
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-name">Wednesday</span>
+      <span class="day-date">April 8</span>
+      <span class="day-badge badge-practice">Practice Day</span>
+    </div>
+    <div class="timeline">
+      <div class="segment" data-time="2026-04-08T09:00:00">
+        <div class="time-col">9:00 – 9:45 AM<small>Free</small></div>
+        <div class="info-col"><span class="event-name">Mornings at the Masters</span><div class="channel-pills"><span class="pill pill-youtube">YouTube</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-08T09:00:00">
+        <div class="time-col">9:00 – 11:00 AM<small>Free</small></div>
+        <div class="info-col"><span class="event-name">On the Range</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-08T10:00:00">
+        <div class="time-col">10:00 AM – 12:00 PM</div>
+        <div class="info-col"><span class="event-name">Practice Round Coverage</span><div class="channel-pills"><span class="pill pill-espn">ESPN App</span></div></div>
+      </div>
+      <div class="switch-arrow">↓ Switch at Noon ↓</div>
+      <div class="segment primary" data-time="2026-04-08T12:00:00">
+        <div class="primary-flag">★ Main Event</div>
+        <div class="time-col">12:00 – 4:00 PM</div>
+        <div class="info-col"><span class="event-name">Par 3 Contest (Stream)</span><div class="channel-pills"><span class="pill pill-espn">ESPN App</span><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-disney">Disney+</span></div></div>
+      </div>
+      <div class="switch-arrow">↓ Switch to ESPN TV at 2 PM ↓</div>
+      <div class="segment primary" data-time="2026-04-08T14:00:00">
+        <div class="primary-flag">★ TV Broadcast</div>
+        <div class="time-col">2:00 – 4:00 PM</div>
+        <div class="info-col"><span class="event-name">Par 3 Contest (TV)</span><div class="channel-pills"><span class="pill pill-espn">ESPN</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-divider"></div>
+
+  <!-- THURSDAY -->
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-name">Thursday</span>
+      <span class="day-date">April 9</span>
+      <span class="day-badge badge-round">Round 1</span>
+    </div>
+    <div class="timeline">
+      <div class="segment" data-time="2026-04-09T07:30:00">
+        <div class="time-col">7:30 AM<small>Ceremony</small></div>
+        <div class="info-col"><span class="event-name">Honorary Starters</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-09T08:30:00">
+        <div class="time-col">8:30 – 10:30 AM<small>Free</small></div>
+        <div class="info-col"><span class="event-name">On the Range</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-09T09:15:00">
+        <div class="time-col">9:15 AM – ongoing</div>
+        <div class="info-col"><span class="event-name">Featured Groups</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-prime">Prime Video</span><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-09T10:45:00">
+        <div class="time-col">10:45 AM – 6:00 PM</div>
+        <div class="info-col"><span class="event-name">Amen Corner (11, 12 &amp; 13)</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-prime">Prime Video</span><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-09T11:45:00">
+        <div class="time-col">11:45 AM – 7:00 PM</div>
+        <div class="info-col"><span class="event-name">Holes 15 &amp; 16</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-prime">Prime Video</span></div></div>
+      </div>
+      <div class="switch-arrow">↓ Switch to Prime Video at 1 PM ↓</div>
+      <div class="segment primary" data-time="2026-04-09T13:00:00">
+        <div class="primary-flag">★ TV Broadcast</div>
+        <div class="time-col">1:00 – 3:00 PM</div>
+        <div class="info-col"><span class="event-name">Round 1 – Early Coverage</span><div class="channel-pills"><span class="pill pill-prime">Prime Video</span></div></div>
+      </div>
+      <div class="switch-arrow">↓ Switch to ESPN at 3 PM ↓</div>
+      <div class="segment primary" data-time="2026-04-09T15:00:00">
+        <div class="primary-flag">★ Main Broadcast</div>
+        <div class="time-col">3:00 – 7:30 PM</div>
+        <div class="info-col"><span class="event-name">Round 1 – Main Coverage</span><div class="channel-pills"><span class="pill pill-espn">ESPN</span></div></div>
+      </div>
+    </div>
+    <p class="note">Masters.com / App streams everything free all day. Use Featured Groups to follow specific players.</p>
+  </div>
+
+  <div class="day-divider"></div>
+
+  <!-- FRIDAY -->
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-name">Friday</span>
+      <span class="day-date">April 10</span>
+      <span class="day-badge badge-round">Round 2</span>
+    </div>
+    <div class="timeline">
+      <div class="segment" data-time="2026-04-10T09:15:00">
+        <div class="time-col">9:15 AM – ongoing</div>
+        <div class="info-col"><span class="event-name">Featured Groups</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-prime">Prime Video</span><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-10T10:45:00">
+        <div class="time-col">10:45 AM – 6:00 PM</div>
+        <div class="info-col"><span class="event-name">Amen Corner (11, 12 &amp; 13)</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-prime">Prime Video</span><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-10T11:45:00">
+        <div class="time-col">11:45 AM – 7:00 PM</div>
+        <div class="info-col"><span class="event-name">Holes 15 &amp; 16</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-prime">Prime Video</span></div></div>
+      </div>
+      <div class="switch-arrow">↓ Switch to Prime Video at 1 PM ↓</div>
+      <div class="segment primary" data-time="2026-04-10T13:00:00">
+        <div class="primary-flag">★ TV Broadcast</div>
+        <div class="time-col">1:00 – 3:00 PM</div>
+        <div class="info-col"><span class="event-name">Round 2 – Early Coverage</span><div class="channel-pills"><span class="pill pill-prime">Prime Video</span></div></div>
+      </div>
+      <div class="switch-arrow">↓ Switch to ESPN at 3 PM ↓</div>
+      <div class="segment primary" data-time="2026-04-10T15:00:00">
+        <div class="primary-flag">★ Main Broadcast</div>
+        <div class="time-col">3:00 – 7:30 PM</div>
+        <div class="info-col"><span class="event-name">Round 2 – Main Coverage</span><div class="channel-pills"><span class="pill pill-espn">ESPN</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-divider"></div>
+
+  <!-- SATURDAY -->
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-name">Saturday</span>
+      <span class="day-date">April 11</span>
+      <span class="day-badge badge-round">Round 3</span>
+    </div>
+    <div class="timeline">
+      <div class="segment" data-time="2026-04-11T10:00:00">
+        <div class="time-col">10:00 AM – ongoing</div>
+        <div class="info-col"><span class="event-name">Featured Groups</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-prime">Prime Video</span><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-11T11:45:00">
+        <div class="time-col">11:45 AM – 6:00 PM</div>
+        <div class="info-col"><span class="event-name">Amen Corner &amp; Holes 15, 16</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-prime">Prime Video</span><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="switch-arrow">↓ Switch to Paramount+ at Noon ↓</div>
+      <div class="segment primary" data-time="2026-04-11T12:00:00">
+        <div class="primary-flag">★ TV Broadcast</div>
+        <div class="time-col">12:00 – 2:00 PM</div>
+        <div class="info-col"><span class="event-name">Round 3 – Early Coverage</span><div class="channel-pills"><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="switch-arrow">↓ Switch to CBS at 2 PM ↓</div>
+      <div class="segment primary" data-time="2026-04-11T14:00:00">
+        <div class="primary-flag">★ Main Broadcast</div>
+        <div class="time-col">2:00 – 7:00 PM</div>
+        <div class="info-col"><span class="event-name">Round 3 – Main Coverage</span><div class="channel-pills"><span class="pill pill-cbs">CBS</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-divider"></div>
+
+  <!-- SUNDAY -->
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-name">Sunday</span>
+      <span class="day-date">April 12</span>
+      <span class="day-badge badge-round">Round 4 – Final</span>
+    </div>
+    <div class="timeline">
+      <div class="segment" data-time="2026-04-12T10:15:00">
+        <div class="time-col">10:15 AM – ongoing</div>
+        <div class="info-col"><span class="event-name">Featured Groups</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-prime">Prime Video</span><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-12T11:45:00">
+        <div class="time-col">11:45 AM – 7:00 PM</div>
+        <div class="info-col"><span class="event-name">Amen Corner &amp; Holes 15, 16</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-prime">Prime Video</span><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="switch-arrow">↓ Switch to Paramount+ at Noon ↓</div>
+      <div class="segment primary" data-time="2026-04-12T12:00:00">
+        <div class="primary-flag">★ TV Broadcast</div>
+        <div class="time-col">12:00 – 2:00 PM</div>
+        <div class="info-col"><span class="event-name">Round 4 – Early Coverage</span><div class="channel-pills"><span class="pill pill-paramount">Paramount+</span></div></div>
+      </div>
+      <div class="switch-arrow">↓ Switch to CBS at 2 PM ↓</div>
+      <div class="segment primary" data-time="2026-04-12T14:00:00">
+        <div class="primary-flag">★ Main Broadcast</div>
+        <div class="time-col">2:00 – 7:00 PM</div>
+        <div class="info-col"><span class="event-name">Round 4 – Final Round</span><div class="channel-pills"><span class="pill pill-cbs">CBS</span></div></div>
+      </div>
+      <div class="segment" data-time="2026-04-12T19:00:00">
+        <div class="time-col">~7:00 PM<small>Ceremony</small></div>
+        <div class="info-col"><span class="event-name">Green Jacket Ceremony</span><div class="channel-pills"><span class="pill pill-masters">Masters.com/App</span><span class="pill pill-cbs">CBS</span></div></div>
+      </div>
+    </div>
+    <p class="note">Jim Nantz hosts CBS for the 39th time. Don't miss the Green Jacket ceremony after coverage ends.</p>
+  </div>
+
+  <!-- Scheduled Alerts List -->
+
+  <div id="alerts-section">
+    <h2>🔔 Your Scheduled Alerts</h2>
+    <div class="alert-list" id="alert-list"></div>
+    <p class="note" style="margin-top:14px;">Alerts fire 5 minutes before each broadcast switch. Keep this page open for alerts to work.</p>
+  </div>
+
+  <footer>
+    <p>
+      <strong>One-stop tip:</strong> Masters.com &amp; the Masters App carry free simulcasts of every broadcast all week.<br>
+      All times Eastern · Schedule subject to change · 2026 Masters, Augusta National
+    </p>
+  </footer>
+
+</div>
+
+<script>
+// ─── ALL ALERT EVENTS ───────────────────────────────────────────────────────
+// Each fires 5 minutes before the listed start time
+const ALERTS = [
+  // Wednesday
+  { time: "2026-04-08T09:00:00", label: "Mornings at the Masters starting", channel: "Masters YouTube" },
+  { time: "2026-04-08T12:00:00", label: "Par 3 Contest starting", channel: "ESPN App / Masters.com" },
+  { time: "2026-04-08T14:00:00", label: "Par 3 Contest TV broadcast starting", channel: "ESPN (TV)" },
+  // Thursday
+  { time: "2026-04-09T07:30:00", label: "Honorary Starters ceremony", channel: "Masters.com / App" },
+  { time: "2026-04-09T13:00:00", label: "Round 1 early coverage starting", channel: "Prime Video" },
+  { time: "2026-04-09T15:00:00", label: "🔀 Switch now — Round 1 main broadcast", channel: "ESPN (TV)" },
+  // Friday
+  { time: "2026-04-10T13:00:00", label: "Round 2 early coverage starting", channel: "Prime Video" },
+  { time: "2026-04-10T15:00:00", label: "🔀 Switch now — Round 2 main broadcast", channel: "ESPN (TV)" },
+  // Saturday
+  { time: "2026-04-11T12:00:00", label: "Round 3 early coverage starting", channel: "Paramount+" },
+  { time: "2026-04-11T14:00:00", label: "🔀 Switch now — Round 3 main broadcast", channel: "CBS (TV)" },
+  // Sunday
+  { time: "2026-04-12T12:00:00", label: "Round 4 early coverage starting", channel: "Paramount+" },
+  { time: "2026-04-12T14:00:00", label: "🔀 Switch now — FINAL ROUND", channel: "CBS (TV)" },
+  { time: "2026-04-12T19:00:00", label: "Green Jacket Ceremony", channel: "CBS / Masters.com" },
+];
+
+const NOTIFY_BEFORE_MS = 5 * 60 * 1000; // 5 minutes early
+let scheduledTimers = [];
+let alertsEnabled = false;
+
+// ─── iOS DETECTION ──────────────────────────────────────────────────────────
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+function isInStandaloneMode() {
+  return ('standalone' in window.navigator) && window.navigator.standalone;
+}
+
+// ─── ON LOAD ────────────────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  // Show iOS hint if on iPhone/iPad but not installed to home screen
+  if (isIOS() && !isInStandaloneMode()) {
+    document.getElementById('ios-hint').style.display = 'block';
+  }
+
+  // Check if permission already granted
+  if ('Notification' in window && Notification.permission === 'granted') {
+    setAlertsEnabled();
+  }
+
+  // Highlight upcoming/live segments
+  highlightUpcoming();
+});
+
+// ─── ENABLE ALERTS ──────────────────────────────────────────────────────────
+async function enableAlerts() {
+  const btn = document.getElementById('enable-btn');
+  const msg = document.getElementById('status-msg');
+
+  if (!('Notification' in window)) {
+    msg.style.display = 'block';
+    msg.textContent = '⚠️ Notifications not supported in this browser.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Requesting…';
+
+  const permission = await Notification.requestPermission();
+
+  if (permission === 'granted') {
+    setAlertsEnabled();
+    // Send a test notification immediately
+    new Notification('🏌️ Masters Alerts Active!', {
+      body: 'You\'ll be notified 5 min before each channel switch. Keep this page open.',
+      icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Augusta_National_Golf_Club_logo.svg/200px-Augusta_National_Golf_Club_logo.svg.png'
+    });
+  } else {
+    btn.disabled = false;
+    btn.textContent = 'Enable Alerts';
+    msg.style.display = 'block';
+    msg.textContent = '⚠️ Permission denied. Please allow notifications in your browser settings.';
+  }
+}
+
+function setAlertsEnabled() {
+  alertsEnabled = true;
+  const btn = document.getElementById('enable-btn');
+  btn.disabled = true;
+  btn.textContent = '✓ Alerts Active';
+  const msg = document.getElementById('status-msg');
+  msg.style.display = 'block';
+  msg.textContent = '✅ You\'re all set! Keep this page open.';
+  scheduleAllAlerts();
+  renderAlertsList();
+  document.getElementById('alerts-section').style.display = 'block';
+}
+
+// ─── SCHEDULE ALERTS ────────────────────────────────────────────────────────
+function scheduleAllAlerts() {
+  // Clear any existing
+  scheduledTimers.forEach(t => clearTimeout(t));
+  scheduledTimers = [];
+
+  const now = Date.now();
+
+  ALERTS.forEach((alert, i) => {
+    // Parse as local time by replacing T with space (avoids UTC parsing)
+    const eventTime = new Date(alert.time).getTime();
+    const notifyTime = eventTime - NOTIFY_BEFORE_MS;
+    const delay = notifyTime - now;
+
+    if (delay > 0) {
+      const t = setTimeout(() => {
+        fireNotification(alert, i);
+      }, delay);
+      scheduledTimers.push(t);
+    }
+  });
+}
+
+function fireNotification(alert, index) {
+  if (Notification.permission === 'granted') {
+    new Notification(`📺 Masters: ${alert.label}`, {
+      body: `Tune to: ${alert.channel}`,
+      icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Augusta_National_Golf_Club_logo.svg/200px-Augusta_National_Golf_Club_logo.svg.png',
+      tag: `masters-alert-${index}`,
+      requireInteraction: true
+    });
+  }
+  // Mark as fired in the list
+  const item = document.getElementById(`alert-item-${index}`);
+  if (item) item.classList.add('fired');
+}
+
+// ─── RENDER ALERTS LIST ─────────────────────────────────────────────────────
+function renderAlertsList() {
+  const list = document.getElementById('alert-list');
+  const now = Date.now();
+  list.innerHTML = '';
+
+  ALERTS.forEach((alert, i) => {
+    const eventTime = new Date(alert.time).getTime();
+    const notifyTime = eventTime - NOTIFY_BEFORE_MS;
+    const fired = notifyTime <= now;
+
+    const d = new Date(alert.time);
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const hrs = d.getHours();
+    const mins = d.getMinutes().toString().padStart(2,'0');
+    const ampm = hrs >= 12 ? 'PM' : 'AM';
+    const h12 = hrs % 12 || 12;
+    const label = `${dayNames[d.getDay()]} ${h12}:${mins} ${ampm}`;
+
+    const item = document.createElement('div');
+    item.className = `alert-item${fired ? ' fired' : ''}`;
+    item.id = `alert-item-${i}`;
+    item.innerHTML = `
+      <div class="alert-dot"></div>
+      <div class="alert-time">${label}</div>
+      <div class="alert-desc">${alert.label} — <strong style="color:var(--gold-light)">${alert.channel}</strong></div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+// ─── HIGHLIGHT UPCOMING SEGMENTS ────────────────────────────────────────────
+function highlightUpcoming() {
+  const now = Date.now();
+  const segments = document.querySelectorAll('.segment[data-time]');
+
+  segments.forEach(seg => {
+    const t = new Date(seg.getAttribute('data-time')).getTime();
+    const diff = t - now;
+
+    if (diff > 0 && diff < 30 * 60 * 1000) {
+      // Starting within 30 mins
+      seg.classList.add('upcoming');
+      const name = seg.querySelector('.event-name');
+      if (name && !name.querySelector('.live-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'live-badge';
+        badge.textContent = 'SOON';
+        name.appendChild(badge);
+      }
+    } else if (diff <= 0 && diff > -3 * 60 * 60 * 1000) {
+      // Started in last 3 hours = possibly live
+      seg.classList.add('upcoming');
+      const name = seg.querySelector('.event-name');
+      if (name && !name.querySelector('.live-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'live-badge';
+        badge.textContent = 'LIVE';
+        name.appendChild(badge);
+      }
+    }
+  });
+}
+
+// Refresh live badges every minute
+setInterval(highlightUpcoming, 60000);
+</script>
+
+</body>
+</html>
