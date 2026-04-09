@@ -230,6 +230,7 @@ h1{font-size:26px;}
   <button class="tab" onclick="showTab('map',this)">🗺 Course</button>
   <button class="tab" onclick="showTab('tracker',this)">👤 Players</button>
   <button class="tab" onclick="showTab('alerts',this)">🔔 Alerts</button>
+  <button class="tab" onclick="showTab('teetimes',this)">⛳ Tee Times</button>
   <button class="tab" onclick="showTab('odds',this)">💰 Odds</button>
 </div>
 
@@ -525,6 +526,41 @@ h1{font-size:26px;}
   <div class="tracked-list" id="plist"></div>
 </div>
 
+<!-- ═══════════ TEE TIMES ═════════════════════════════════════════════ -->
+
+<div class="tab-panel" id="tab-teetimes">
+  <div class="lb-header">
+    <span class="lb-title">⛳ Tee Times</span>
+    <span class="lb-updated">All times ET · Holes 1 &amp; 10</span>
+  </div>
+  <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
+    <button class="map-chip active" onclick="showRound('r1',this)">Thu · Round 1</button>
+    <button class="map-chip" onclick="showRound('r2',this)">Fri · Round 2</button>
+    <button class="map-chip" onclick="showRound('r34',this)">Sat/Sun R3 &amp; R4</button>
+  </div>
+  <input id="tt-search" class="tracker-input" placeholder="🔍 Search player…" oninput="filterTees()" style="width:100%;margin-bottom:12px;">
+  <div id="tt-r1">
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px;line-height:1.6;padding:8px 12px;background:rgba(201,168,76,.08);border-radius:8px;border-left:3px solid var(--gold);"><strong style="color:var(--gold);">7:25 AM</strong> — Ceremonial tee shots: Jack Nicklaus, Gary Player &amp; Tom Watson</p>
+    <table class="lb-table">
+      <thead><tr><th style="width:90px">Time ET</th><th>Players</th><th style="width:40px">Tee</th></tr></thead>
+      <tbody id="tt-body-r1"></tbody>
+    </table>
+  </div>
+  <div id="tt-r2" style="display:none;">
+    <p style="font-size:12.5px;color:var(--text-dim);padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border);line-height:1.8;">
+      Round 2 uses <strong style="color:var(--gold);">reversed starting holes</strong> — R1 Hole 1 starters begin on Hole 10 in R2 and vice versa. First groups off at <strong style="color:var(--gold);">7:40 AM ET Friday</strong>.<br><br>
+      Official R2 groupings are released after Round 1 is complete Thursday.<br>Check <strong>Masters.com</strong> for confirmed pairings.
+    </p>
+  </div>
+  <div id="tt-r34" style="display:none;">
+    <p style="font-size:12.5px;color:var(--text-dim);padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border);line-height:1.8;">
+      Weekend tee times are set by the leaderboard after the cut — leaders tee off last. First groups typically off <strong style="color:var(--gold);">~10:00 AM ET</strong> Saturday &amp; Sunday.<br><br>
+      Check <strong>Masters.com</strong> for confirmed weekend pairings after Friday's cut.
+    </p>
+  </div>
+  <p class="lb-note" style="margin-top:10px;">R1 pairings via CBS Sports / Masters.com. Groups play from Holes 1 &amp; 10 simultaneously. (A) = Amateur.</p>
+</div>
+
 <!-- ═══════════ ODDS ══════════════════════════════════════════════════ -->
 
 <div class="tab-panel" id="tab-odds">
@@ -680,6 +716,7 @@ function showTab(id,btn){
   btn.classList.add('active');
   if(id==='leaderboard') loadLeaderboard();
   if(id==='odds') renderOddsBars();
+  if(id==='teetimes') buildTeeTimes();
 }
 
 // ── THEME ──────────────────────────────────────────────────────────────────────
@@ -823,7 +860,121 @@ function filterHoles(type,btn){
   });
 }
 
-// ── PLAYER TRACKER ────────────────────────────────────────────────────────────
+// ── TEE TIMES ─────────────────────────────────────────────────────────────────
+const TEE_TIMES_R1 = [
+  {t:"7:40 AM", players:"John Keefer, Haotong Li", hole:"1"},
+  {t:"7:50 AM", players:"Naoyuki Kataoka, Max Homa, Carlos Ortiz", hole:"1"},
+  {t:"8:02 AM", players:"José María Olazábal, Rasmus Neergaard-Petersen, Aldrich Potgieter", hole:"1"},
+  {t:"8:14 AM", players:"Angel Cabrera, Sami Valimaki, Jackson Herrington (A)", hole:"1"},
+  {t:"8:26 AM", players:"Charl Schwartzel, Max Greyserman, Ryan Fox", hole:"1"},
+  {t:"8:38 AM", players:"Vijay Singh, Matt McCarty, Rasmus Højgaard", hole:"1"},
+  {t:"8:50 AM", players:"Kurt Kitayama, Kristoffer Reitan, Casey Jarvis", hole:"1"},
+  {t:"9:02 AM", players:"Bubba Watson, Nicolas Echavarria, Brandon Holtz (A)", hole:"1"},
+  {t:"9:19 AM", players:"Cameron Smith, Sam Burns, Jake Knapp", hole:"1"},
+  {t:"9:31 AM", players:"Keegan Bradley, Ryan Gerard, Nick Taylor", hole:"1"},
+  {t:"9:43 AM", players:"Dustin Johnson, Maverick McNealy, Fifa Laopakdee (A)", hole:"1"},
+  {t:"9:55 AM", players:"Adam Scott, Wyndham Clark, Mateo Pulcini (A)", hole:"1"},
+  {t:"10:07 AM", players:"Jordan Spieth, Patrick Cantlay, Sepp Straka", hole:"1"},
+  {t:"10:19 AM", players:"Justin Thomas, Akshay Bhatia, Corey Conners", hole:"1"},
+  {t:"10:31 AM", players:"Rory McIlroy, Cameron Young, Mason Howell (A)", hole:"1"},
+  {t:"10:43 AM", players:"Scottie Scheffler, Hideki Matsuyama, Shane Lowry", hole:"1"},
+  {t:"10:55 AM", players:"Jon Rahm, Xander Schauffele, Tommy Fleetwood", hole:"1"},
+  {t:"11:07 AM", players:"Bryson DeChambeau, Collin Morikawa, Viktor Hovland", hole:"1"},
+  {t:"11:19 AM", players:"Ludvig Åberg, Min Woo Lee, Chris Gotterup", hole:"1"},
+  {t:"11:31 AM", players:"Brooks Koepka, Tyrrell Hatton, Justin Rose", hole:"1"},
+  {t:"11:43 AM", players:"Matt Fitzpatrick, Russell Henley, Harris English", hole:"1"},
+  {t:"11:55 AM", players:"Patrick Reed, Jason Day, Im Sung-jae", hole:"1"},
+  {t:"12:07 PM", players:"Max Homa, Robert MacIntyre, Andrew Novak", hole:"10"},
+  {t:"7:40 AM", players:"Sergio Garcia, Brian Campbell, Ethan Fang (A)", hole:"10"},
+  {t:"7:50 AM", players:"Zach Johnson, Harry Hall, Ben Griffin", hole:"10"},
+  {t:"8:02 AM", players:"Mike Weir, Aldrich Potgieter, Fifa Laopakdee (A)", hole:"10"},
+  {t:"8:14 AM", players:"Fred Couples, Li Haotong, Marco Penge", hole:"10"},
+  {t:"8:26 AM", players:"Danny Willett, J.J. Spaun, Brian Harman", hole:"10"},
+  {t:"8:38 AM", players:"Vijay Singh, Stephan Jaeger, Jacob Bridgeman", hole:"10"},
+  {t:"8:50 AM", players:"Tom Kim, Nick Taylor, Taylor Pendrith", hole:"10"},
+  {t:"9:02 AM", players:"Tony Finau, Sam Burns, Keith Mitchell", hole:"10"},
+  {t:"9:19 AM", players:"Si Woo Kim, Ryan Fox, Eric Cole", hole:"10"},
+  {t:"9:31 AM", players:"Denny McCarthy, Adam Hadwin, Christiaan Bezuidenhout", hole:"10"},
+  {t:"9:43 AM", players:"Viktor Hovland, Nicolai Højgaard, Akshay Bhatia", hole:"10"},
+  {t:"9:55 AM", players:"Bubba Watson, Cameron Young, Jackson Herrington (A)", hole:"10"},
+  {t:"10:07 AM", players:"Patrick Cantlay, Sam Burns, Nick Taylor", hole:"10"},
+  {t:"10:19 AM", players:"Justin Rose, Corey Conners, Harry Hall", hole:"10"},
+  {t:"10:31 AM", players:"Tyrrell Hatton, Robert MacIntyre, Carlos Ortiz", hole:"10"},
+  {t:"10:43 AM", players:"Tommy Fleetwood, Min Woo Lee, Sepp Straka", hole:"10"},
+  {t:"10:55 AM", players:"Collin Morikawa, Brooks Koepka, Harris English", hole:"10"},
+  {t:"11:07 AM", players:"Xander Schauffele, Jason Day, Im Sung-jae", hole:"10"},
+  {t:"11:19 AM", players:"Jon Rahm, Matt Fitzpatrick, Russell Henley", hole:"10"},
+  {t:"11:31 AM", players:"Scottie Scheffler, Ludvig Åberg, Chris Gotterup", hole:"10"},
+  {t:"11:43 AM", players:"Bryson DeChambeau, Wyndham Clark, Patrick Reed", hole:"10"},
+  {t:"11:55 AM", players:"Rory McIlroy, Jordan Spieth, Justin Thomas", hole:"10"},
+];
+
+// Sort by time
+function timeToMins(t){
+  const [time,ampm]=t.split(' ');
+  let [h,m]=time.split(':').map(Number);
+  if(ampm==='PM'&&h!==12) h+=12;
+  if(ampm==='AM'&&h===12) h=0;
+  return h*60+m;
+}
+const sortedTees=[...TEE_TIMES_R1].sort((a,b)=>timeToMins(a.t)-timeToMins(b.t));
+
+function buildTeeTimes(){
+  const tbody=document.getElementById('tt-body-r1');
+  if(!tbody||tbody.innerHTML!=='') return;
+  tbody.innerHTML=sortedTees.map(g=>{
+    const isFeatured = g.players.includes('McIlroy')||g.players.includes('Scheffler')||g.players.includes('DeChambeau')||g.players.includes('Rahm')||g.players.includes('Schauffele')||g.players.includes('Morikawa');
+    return `<tr class="${isFeatured?'featured-row':''}" data-players="${g.players.toLowerCase()}">
+      <td style="font-weight:700;color:var(--gold);font-size:12px;">${g.t}</td>
+      <td style="font-size:12.5px;">${g.players}${isFeatured?' <span style="font-size:9px;background:rgba(201,168,76,.2);color:var(--gold-light);padding:1px 5px;border-radius:4px;margin-left:4px;">⭐ FEATURED</span>':''}</td>
+      <td style="font-size:11px;color:var(--text-dim);text-align:center;">${g.hole}</td>
+    </tr>`;
+  }).join('');
+}
+
+function showRound(id, btn){
+  ['r1','r2','r34'].forEach(r=>document.getElementById('tt-'+r).style.display='none');
+  document.getElementById('tt-'+id).style.display='block';
+  document.querySelectorAll('#tab-teetimes .map-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  if(id==='r1') buildTeeTimes();
+}
+
+function filterTees(){
+  const q=document.getElementById('tt-search').value.toLowerCase();
+  document.querySelectorAll('#tt-body-r1 tr').forEach(row=>{
+    row.style.display=(!q||row.getAttribute('data-players').includes(q))?'':'none';
+  });
+}
+
+
+function renderOddsBars(){
+  const container=document.getElementById('odds-bars');
+  if(!container||container.innerHTML!=='') return;
+  const top10=[
+    {name:'Scheffler', pct:15.4},
+    {name:'McIlroy',   pct:12.5},
+    {name:'DeChambeau',pct:8.7},
+    {name:'Morikawa',  pct:7.7},
+    {name:'Schauffele',pct:6.7},
+    {name:'Rahm',      pct:5.9},
+    {name:'Åberg',     pct:5.3},
+    {name:'Fleetwood', pct:4.8},
+    {name:'Hovland',   pct:4.3},
+    {name:'Matsuyama', pct:3.8},
+  ];
+  const max=top10[0].pct;
+  container.innerHTML=top10.map((p,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:80px;font-size:11px;color:var(--text-dim);text-align:right;flex-shrink:0;">${p.name}</div>
+      <div style="flex:1;background:var(--surface);border-radius:6px;height:22px;overflow:hidden;">
+        <div style="width:${(p.pct/max*100).toFixed(1)}%;height:100%;background:linear-gradient(to right,var(--gold),var(--gold-light));border-radius:6px;transition:width .8s ease;display:flex;align-items:center;padding-left:8px;">
+          <span style="font-size:10.5px;font-weight:700;color:#1a1a1a;white-space:nowrap;">${p.pct}%</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
 function suggestP(){
   const v=document.getElementById('pinput').value.trim().toLowerCase(), box=document.getElementById('psug');
   if(v.length<2){box.classList.remove('show');return;}
