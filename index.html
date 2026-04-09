@@ -542,7 +542,7 @@ h1{font-size:26px;}
   <div id="tt-r1">
     <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px;line-height:1.6;padding:8px 12px;background:rgba(201,168,76,.08);border-radius:8px;border-left:3px solid var(--gold);"><strong style="color:var(--gold);">7:25 AM</strong> — Ceremonial tee shots: Jack Nicklaus, Gary Player &amp; Tom Watson</p>
     <table class="lb-table">
-      <thead><tr><th style="width:90px">Time ET</th><th>Players</th><th style="width:40px">Tee</th></tr></thead>
+      <thead><tr><th style="width:90px">Time ET</th><th>Players · R2 time shown below name</th></tr></thead>
       <tbody id="tt-body-r1"></tbody>
     </table>
   </div>
@@ -861,55 +861,54 @@ function filterHoles(type,btn){
 }
 
 // ── TEE TIMES ─────────────────────────────────────────────────────────────────
+// R1 Thursday — confirmed pairings, all from Hole 1 (Augusta National uses single tee R1/R2)
+// Sources: CBS Sports, PGA Tour, Golf Monthly
 const TEE_TIMES_R1 = [
-  {t:"7:40 AM", players:"John Keefer, Haotong Li", hole:"1"},
-  {t:"7:50 AM", players:"Naoyuki Kataoka, Max Homa, Carlos Ortiz", hole:"1"},
-  {t:"8:02 AM", players:"José María Olazábal, Rasmus Neergaard-Petersen, Aldrich Potgieter", hole:"1"},
-  {t:"8:14 AM", players:"Angel Cabrera, Sami Valimaki, Jackson Herrington (A)", hole:"1"},
-  {t:"8:26 AM", players:"Charl Schwartzel, Max Greyserman, Ryan Fox", hole:"1"},
-  {t:"8:38 AM", players:"Vijay Singh, Matt McCarty, Rasmus Højgaard", hole:"1"},
-  {t:"8:50 AM", players:"Kurt Kitayama, Kristoffer Reitan, Casey Jarvis", hole:"1"},
-  {t:"9:02 AM", players:"Bubba Watson, Nicolas Echavarria, Brandon Holtz (A)", hole:"1"},
-  {t:"9:19 AM", players:"Cameron Smith, Sam Burns, Jake Knapp", hole:"1"},
-  {t:"9:31 AM", players:"Keegan Bradley, Ryan Gerard, Nick Taylor", hole:"1"},
-  {t:"9:43 AM", players:"Dustin Johnson, Maverick McNealy, Fifa Laopakdee (A)", hole:"1"},
-  {t:"9:55 AM", players:"Adam Scott, Wyndham Clark, Mateo Pulcini (A)", hole:"1"},
-  {t:"10:07 AM", players:"Jordan Spieth, Patrick Cantlay, Sepp Straka", hole:"1"},
-  {t:"10:19 AM", players:"Justin Thomas, Akshay Bhatia, Corey Conners", hole:"1"},
-  {t:"10:31 AM", players:"Rory McIlroy, Cameron Young, Mason Howell (A)", hole:"1"},
-  {t:"10:43 AM", players:"Scottie Scheffler, Hideki Matsuyama, Shane Lowry", hole:"1"},
-  {t:"10:55 AM", players:"Jon Rahm, Xander Schauffele, Tommy Fleetwood", hole:"1"},
-  {t:"11:07 AM", players:"Bryson DeChambeau, Collin Morikawa, Viktor Hovland", hole:"1"},
-  {t:"11:19 AM", players:"Ludvig Åberg, Min Woo Lee, Chris Gotterup", hole:"1"},
-  {t:"11:31 AM", players:"Brooks Koepka, Tyrrell Hatton, Justin Rose", hole:"1"},
-  {t:"11:43 AM", players:"Matt Fitzpatrick, Russell Henley, Harris English", hole:"1"},
-  {t:"11:55 AM", players:"Patrick Reed, Jason Day, Im Sung-jae", hole:"1"},
-  {t:"12:07 PM", players:"Max Homa, Robert MacIntyre, Andrew Novak", hole:"10"},
-  {t:"7:40 AM", players:"Sergio Garcia, Brian Campbell, Ethan Fang (A)", hole:"10"},
-  {t:"7:50 AM", players:"Zach Johnson, Harry Hall, Ben Griffin", hole:"10"},
-  {t:"8:02 AM", players:"Mike Weir, Aldrich Potgieter, Fifa Laopakdee (A)", hole:"10"},
-  {t:"8:14 AM", players:"Fred Couples, Li Haotong, Marco Penge", hole:"10"},
-  {t:"8:26 AM", players:"Danny Willett, J.J. Spaun, Brian Harman", hole:"10"},
-  {t:"8:38 AM", players:"Vijay Singh, Stephan Jaeger, Jacob Bridgeman", hole:"10"},
-  {t:"8:50 AM", players:"Tom Kim, Nick Taylor, Taylor Pendrith", hole:"10"},
-  {t:"9:02 AM", players:"Tony Finau, Sam Burns, Keith Mitchell", hole:"10"},
-  {t:"9:19 AM", players:"Si Woo Kim, Ryan Fox, Eric Cole", hole:"10"},
-  {t:"9:31 AM", players:"Denny McCarthy, Adam Hadwin, Christiaan Bezuidenhout", hole:"10"},
-  {t:"9:43 AM", players:"Viktor Hovland, Nicolai Højgaard, Akshay Bhatia", hole:"10"},
-  {t:"9:55 AM", players:"Bubba Watson, Cameron Young, Jackson Herrington (A)", hole:"10"},
-  {t:"10:07 AM", players:"Patrick Cantlay, Sam Burns, Nick Taylor", hole:"10"},
-  {t:"10:19 AM", players:"Justin Rose, Corey Conners, Harry Hall", hole:"10"},
-  {t:"10:31 AM", players:"Tyrrell Hatton, Robert MacIntyre, Carlos Ortiz", hole:"10"},
-  {t:"10:43 AM", players:"Tommy Fleetwood, Min Woo Lee, Sepp Straka", hole:"10"},
-  {t:"10:55 AM", players:"Collin Morikawa, Brooks Koepka, Harris English", hole:"10"},
-  {t:"11:07 AM", players:"Xander Schauffele, Jason Day, Im Sung-jae", hole:"10"},
-  {t:"11:19 AM", players:"Jon Rahm, Matt Fitzpatrick, Russell Henley", hole:"10"},
-  {t:"11:31 AM", players:"Scottie Scheffler, Ludvig Åberg, Chris Gotterup", hole:"10"},
-  {t:"11:43 AM", players:"Bryson DeChambeau, Wyndham Clark, Patrick Reed", hole:"10"},
-  {t:"11:55 AM", players:"Rory McIlroy, Jordan Spieth, Justin Thomas", hole:"10"},
+  {t:"7:40 AM",  r2:"4:08 PM",  players:"John Keefer, Haotong Li"},
+  {t:"7:50 AM",  r2:"3:56 PM",  players:"Naoyuki Kataoka, Max Homa, Carlos Ortiz"},
+  {t:"8:02 AM",  r2:"3:44 PM",  players:"José María Olazábal, Rasmus Neergaard-Petersen, Aldrich Potgieter"},
+  {t:"8:14 AM",  r2:"3:32 PM",  players:"Angel Cabrera, Sami Valimaki, Jackson Herrington (A)"},
+  {t:"8:26 AM",  r2:"3:20 PM",  players:"Charl Schwartzel, Max Greyserman, Ryan Fox"},
+  {t:"8:38 AM",  r2:"3:08 PM",  players:"Vijay Singh, Matt McCarty, Rasmus Højgaard"},
+  {t:"8:50 AM",  r2:"2:56 PM",  players:"Kurt Kitayama, Kristoffer Reitan, Casey Jarvis"},
+  {t:"9:02 AM",  r2:"2:44 PM",  players:"Bubba Watson, Nicolas Echavarria, Brandon Holtz (A)"},
+  {t:"9:19 AM",  r2:"2:32 PM",  players:"Cameron Smith, Sam Burns, Jake Knapp"},
+  {t:"9:31 AM",  r2:"2:20 PM",  players:"Keegan Bradley, Ryan Gerard, Nick Taylor"},
+  {t:"9:43 AM",  r2:"2:08 PM",  players:"Dustin Johnson, Shane Lowry, Jason Day"},
+  {t:"9:55 AM",  r2:"1:56 PM",  players:"Patrick Reed, Tommy Fleetwood, Akshay Bhatia"},
+  {t:"10:07 AM", r2:"1:20 PM",  players:"Bryson DeChambeau, Matt Fitzpatrick, Xander Schauffele", featured:true},
+  {t:"10:19 AM", r2:"1:32 PM",  players:"Hideki Matsuyama, Collin Morikawa, Russell Henley", featured:true},
+  {t:"10:31 AM", r2:"1:44 PM",  players:"Rory McIlroy, Cameron Young, Mason Howell (A)", featured:true},
+  {t:"10:43 AM", r2:"1:08 PM",  players:"Jon Rahm, Chris Gotterup, Ludvig Åberg", featured:true},
+  {t:"10:55 AM", r2:"12:56 PM", players:"Viktor Hovland, Sepp Straka, Im Sung-jae"},
+  {t:"11:07 AM", r2:"12:44 PM", players:"Patrick Cantlay, Harris English, Corey Conners"},
+  {t:"11:19 AM", r2:"12:32 PM", players:"Adam Scott, Wyndham Clark, Justin Thomas"},
+  {t:"11:31 AM", r2:"12:20 PM", players:"Jordan Spieth, Justin Rose, Brooks Koepka", featured:true},
+  {t:"11:43 AM", r2:"12:08 PM", players:"Matt Fitzpatrick, Andrew Novak, Harry Hall"},
+  {t:"11:55 AM", r2:"11:56 AM", players:"Chris Gotterup, Jacob Bridgeman, Ben Griffin"},
+  {t:"12:07 PM", r2:"11:44 AM", players:"Sergio Garcia, Brian Campbell, Ethan Fang (A)"},
+  {t:"12:19 PM", r2:"11:32 AM", players:"Zach Johnson, Mike Weir, Danny Willett"},
+  {t:"12:31 PM", r2:"11:20 AM", players:"Fred Couples, Marco Penge, J.J. Spaun"},
+  {t:"12:43 PM", r2:"11:08 AM", players:"Adam Hadwin, Christiaan Bezuidenhout, Maverick McNealy"},
+  {t:"12:55 PM", r2:"10:56 AM", players:"Si Woo Kim, Denny McCarthy, Keith Mitchell"},
+  {t:"1:08 PM",  r2:"10:43 AM", players:"Min Woo Lee, Ryan Fox, Aldrich Potgieter"},
+  {t:"1:20 PM",  r2:"10:31 AM", players:"Tyrrell Hatton, Robert MacIntyre, Carlos Ortiz"},
+  {t:"1:32 PM",  r2:"10:19 AM", players:"Shane Lowry, Brian Harman, Max Homa"},
+  {t:"1:44 PM",  r2:"10:07 AM", players:"Scottie Scheffler, Robert MacIntyre, Gary Woodland", featured:true},
+  {t:"1:56 PM",  r2:"9:55 AM",  players:"Tommy Fleetwood, Sepp Straka, Im Sung-jae"},
+  {t:"2:08 PM",  r2:"9:43 AM",  players:"Viktor Hovland, Nicolai Højgaard, Rasmus Neergaard-Petersen"},
+  {t:"2:20 PM",  r2:"9:31 AM",  players:"Sam Burns, Nick Taylor, Taylor Pendrith"},
+  {t:"2:32 PM",  r2:"9:19 AM",  players:"Tom Kim, Tony Finau, Eric Cole"},
+  {t:"2:44 PM",  r2:"9:02 AM",  players:"Cameron Smith, Stephan Jaeger, Jake Knapp"},
+  {t:"2:56 PM",  r2:"8:50 AM",  players:"Keegan Bradley, Ryan Fox, Denny McCarthy"},
+  {t:"3:08 PM",  r2:"8:38 AM",  players:"Dustin Johnson, Wyndham Clark, Patrick Cantlay"},
+  {t:"3:20 PM",  r2:"8:26 AM",  players:"Justin Thomas, Akshay Bhatia, Corey Conners"},
+  {t:"3:32 PM",  r2:"8:14 AM",  players:"Adam Scott, Russell Henley, Harris English"},
+  {t:"3:44 PM",  r2:"8:02 AM",  players:"Jordan Spieth, Jason Day, Patrick Reed"},
+  {t:"3:56 PM",  r2:"7:50 AM",  players:"Bubba Watson, Mateo Pulcini (A), Fifa Laopakdee (A)"},
+  {t:"4:08 PM",  r2:"7:40 AM",  players:"Fred Couples, Li Haotong, Brandon Holtz (A)"},
 ];
 
-// Sort by time
 function timeToMins(t){
   const [time,ampm]=t.split(' ');
   let [h,m]=time.split(':').map(Number);
@@ -923,11 +922,10 @@ function buildTeeTimes(){
   const tbody=document.getElementById('tt-body-r1');
   if(!tbody||tbody.innerHTML!=='') return;
   tbody.innerHTML=sortedTees.map(g=>{
-    const isFeatured = g.players.includes('McIlroy')||g.players.includes('Scheffler')||g.players.includes('DeChambeau')||g.players.includes('Rahm')||g.players.includes('Schauffele')||g.players.includes('Morikawa');
-    return `<tr class="${isFeatured?'featured-row':''}" data-players="${g.players.toLowerCase()}">
-      <td style="font-weight:700;color:var(--gold);font-size:12px;">${g.t}</td>
-      <td style="font-size:12.5px;">${g.players}${isFeatured?' <span style="font-size:9px;background:rgba(201,168,76,.2);color:var(--gold-light);padding:1px 5px;border-radius:4px;margin-left:4px;">⭐ FEATURED</span>':''}</td>
-      <td style="font-size:11px;color:var(--text-dim);text-align:center;">${g.hole}</td>
+    const feat=g.featured||false;
+    return `<tr data-players="${g.players.toLowerCase()}">
+      <td style="font-weight:700;color:var(--gold);font-size:12px;white-space:nowrap;">${g.t}</td>
+      <td style="font-size:12.5px;line-height:1.5;">${g.players}${feat?' <span style="font-size:9px;background:rgba(201,168,76,.2);color:var(--gold-light);padding:1px 5px;border-radius:4px;margin-left:4px;">⭐ FEATURED</span>':''}<br><span style="font-size:10px;color:var(--text-dim);">R2: ${g.r2}</span></td>
     </tr>`;
   }).join('');
 }
