@@ -230,6 +230,7 @@ h1{font-size:26px;}
   <button class="tab" onclick="showTab('map',this)">🗺 Course</button>
   <button class="tab" onclick="showTab('tracker',this)">👤 Players</button>
   <button class="tab" onclick="showTab('alerts',this)">🔔 Alerts</button>
+  <button class="tab" onclick="showTab('odds',this)">💰 Odds</button>
 </div>
 
 <!-- ═══════════ SCHEDULE ═══════════════════════════════════════════════ -->
@@ -524,6 +525,60 @@ h1{font-size:26px;}
   <div class="tracked-list" id="plist"></div>
 </div>
 
+<!-- ═══════════ ODDS ══════════════════════════════════════════════════ -->
+
+<div class="tab-panel" id="tab-odds">
+  <div class="lb-header">
+    <span class="lb-title">💰 Betting Odds</span>
+    <span class="lb-updated">via BetMGM / DraftKings · Apr 8</span>
+  </div>
+  <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px;line-height:1.6;">Outright winner odds. Lower number = bigger payout. Negative = favourite. Must be 21+ and in a legal betting state to wager. Odds subject to change.</p>
+
+  <table class="lb-table" id="odds-table">
+    <thead><tr><th>#</th><th>Player</th><th>Odds</th><th>Implied %</th></tr></thead>
+    <tbody>
+      <tr><td class="lb-pos">1</td><td>Scottie Scheffler</td><td class="lb-score-under">+550</td><td class="lb-thru">15.4%</td></tr>
+      <tr><td class="lb-pos">2</td><td>Rory McIlroy</td><td class="lb-score-under">+700</td><td class="lb-thru">12.5%</td></tr>
+      <tr><td class="lb-pos">3</td><td>Bryson DeChambeau</td><td class="lb-score-under">+1050</td><td class="lb-thru">8.7%</td></tr>
+      <tr><td class="lb-pos">4</td><td>Collin Morikawa</td><td class="lb-score-under">+1200</td><td class="lb-thru">7.7%</td></tr>
+      <tr><td class="lb-pos">5</td><td>Xander Schauffele</td><td class="lb-score-under">+1400</td><td class="lb-thru">6.7%</td></tr>
+      <tr><td class="lb-pos">6</td><td>Jon Rahm</td><td class="lb-score-under">+1600</td><td class="lb-thru">5.9%</td></tr>
+      <tr><td class="lb-pos">7</td><td>Ludvig Åberg</td><td class="lb-score-under">+1800</td><td class="lb-thru">5.3%</td></tr>
+      <tr><td class="lb-pos">8</td><td>Tommy Fleetwood</td><td class="lb-score-under">+2000</td><td class="lb-thru">4.8%</td></tr>
+      <tr><td class="lb-pos">9</td><td>Viktor Hovland</td><td class="lb-score-under">+2200</td><td class="lb-thru">4.3%</td></tr>
+      <tr><td class="lb-pos">10</td><td>Hideki Matsuyama</td><td class="lb-score-even">+2500</td><td class="lb-thru">3.8%</td></tr>
+      <tr><td class="lb-pos">11</td><td>Min Woo Lee</td><td class="lb-score-even">+2500</td><td class="lb-thru">3.8%</td></tr>
+      <tr><td class="lb-pos">12</td><td>Jordan Spieth</td><td class="lb-score-even">+2800</td><td class="lb-thru">3.4%</td></tr>
+      <tr><td class="lb-pos">13</td><td>Shane Lowry</td><td class="lb-score-even">+3000</td><td class="lb-thru">3.2%</td></tr>
+      <tr><td class="lb-pos">14</td><td>Justin Thomas</td><td class="lb-score-even">+3000</td><td class="lb-thru">3.2%</td></tr>
+      <tr><td class="lb-pos">15</td><td>Brooks Koepka</td><td class="lb-score-even">+3300</td><td class="lb-thru">2.9%</td></tr>
+      <tr><td class="lb-pos">16</td><td>Patrick Cantlay</td><td class="lb-score-even">+3500</td><td class="lb-thru">2.8%</td></tr>
+      <tr><td class="lb-pos">17</td><td>Tyrrell Hatton</td><td class="lb-score-even">+4000</td><td class="lb-thru">2.4%</td></tr>
+      <tr><td class="lb-pos">18</td><td>Cameron Smith</td><td class="lb-score-even">+4000</td><td class="lb-thru">2.4%</td></tr>
+      <tr><td class="lb-pos">19</td><td>Chris Gotterup</td><td class="lb-score-over">+5000</td><td class="lb-thru">2.0%</td></tr>
+      <tr><td class="lb-pos">20</td><td>Akshay Bhatia</td><td class="lb-score-over">+5000</td><td class="lb-thru">2.0%</td></tr>
+      <tr><td class="lb-pos">21</td><td>Robert MacIntyre</td><td class="lb-score-over">+5500</td><td class="lb-thru">1.8%</td></tr>
+      <tr><td class="lb-pos">22</td><td>Wyndham Clark</td><td class="lb-score-over">+6000</td><td class="lb-thru">1.6%</td></tr>
+      <tr><td class="lb-pos">23</td><td>Matt Fitzpatrick</td><td class="lb-score-over">+6000</td><td class="lb-thru">1.6%</td></tr>
+      <tr><td class="lb-pos">24</td><td>Sepp Straka</td><td class="lb-score-over">+6500</td><td class="lb-thru">1.5%</td></tr>
+      <tr><td class="lb-pos">25</td><td>Adam Scott</td><td class="lb-score-over">+8000</td><td class="lb-thru">1.2%</td></tr>
+      <tr><td class="lb-pos">26</td><td>Dustin Johnson</td><td class="lb-score-over">+8000</td><td class="lb-thru">1.2%</td></tr>
+      <tr><td class="lb-pos">27</td><td>Justin Rose</td><td class="lb-score-over">+8000</td><td class="lb-thru">1.2%</td></tr>
+      <tr><td class="lb-pos">28</td><td>Corey Conners</td><td class="lb-score-over">+9000</td><td class="lb-thru">1.1%</td></tr>
+      <tr><td class="lb-pos">29</td><td>Jason Day</td><td class="lb-score-over">+10000</td><td class="lb-thru">1.0%</td></tr>
+      <tr><td class="lb-pos">30</td><td>Sergio Garcia</td><td class="lb-score-over">+15000</td><td class="lb-thru">0.7%</td></tr>
+    </tbody>
+  </table>
+  <p class="lb-note" style="margin-top:12px;">Odds via BetMGM/DraftKings as of Apr 8, 2026. For entertainment only. Please gamble responsibly. 1-800-GAMBLER.</p>
+
+  <!-- Odds bar chart -->
+
+  <div style="margin-top:24px;">
+    <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:12px;">Top 10 Implied Win Probability</div>
+    <div id="odds-bars"></div>
+  </div>
+</div>
+
 <!-- ═══════════ ALERTS ════════════════════════════════════════════════ -->
 
 <div class="tab-panel" id="tab-alerts">
@@ -575,7 +630,33 @@ const HOLES={
   17:{n:"Hole 17 — Nandina (Par 4, 440 yds)",d:"Deceptively difficult. Narrow fairway, then front bunkers guard a tricky approach."},
   18:{n:"Hole 18 — Holly (Par 4, 465 yds)",d:"Classic uphill finisher. Two fairway bunkers guard the drive zone. Slopes severely back-to-front — a stage for drama."},
 };
-const PLAYERS=["Scottie Scheffler","Rory McIlroy","Bryson DeChambeau","Jon Rahm","Xander Schauffele","Collin Morikawa","Viktor Hovland","Tommy Fleetwood","Brooks Koepka","Jordan Spieth","Justin Thomas","Patrick Cantlay","Hideki Matsuyama","Shane Lowry","Tyrrell Hatton","Max Homa","Cameron Smith","Tony Finau","Ludvig Åberg","Sergio Garcia","Jason Day","Adam Scott","Matt Fitzpatrick","Sepp Straka","Russell Henley","Keegan Bradley","Harris English","Wyndham Clark","Min Woo Lee","Tom Kim"];
+const PLAYERS=[
+  // Past Masters Champions
+  "Scottie Scheffler","Rory McIlroy","Jon Rahm","Hideki Matsuyama","Patrick Reed",
+  "Dustin Johnson","Adam Scott","Jordan Spieth","Sergio Garcia","Bubba Watson",
+  "Charl Schwartzel","Angel Cabrera","Zach Johnson","Fred Couples","Mike Weir",
+  "Danny Willett","Vijay Singh",
+  // Major champions / top players
+  "Bryson DeChambeau","Xander Schauffele","Collin Morikawa","Viktor Hovland",
+  "Tommy Fleetwood","Brooks Koepka","Justin Thomas","Patrick Cantlay",
+  "Shane Lowry","Tyrrell Hatton","Max Homa","Cameron Smith","Ludvig Åberg",
+  "Jason Day","Matt Fitzpatrick","Sepp Straka","Russell Henley","Keegan Bradley",
+  "Harris English","Wyndham Clark","Min Woo Lee","Brian Harman","Justin Rose",
+  // PGA Tour winners / qualifiers
+  "Akshay Bhatia","Sam Burns","Corey Conners","Im Sung-jae","Robert MacIntyre",
+  "Cameron Young","Chris Gotterup","Jacob Bridgeman","Brian Campbell",
+  "Nico Echavarria","Ryan Fox","Kurt Kitayama","Aldrich Potgieter",
+  "Ben Griffin","Harry Hall","Maverick McNealy","Andrew Novak","Nick Taylor",
+  "Li Haotong","Marco Penge","J.J. Spaun","Carlos Ortiz",
+  // Other field members
+  "Tom Kim","Tony Finau","Wyndham Clark","Si Woo Kim","Sungjae Im",
+  "Taylor Moore","Eric Cole","Denny McCarthy","Stephan Jaeger",
+  "Taylor Pendrith","Adam Hadwin","Keith Mitchell","Christiaan Bezuidenhout",
+  "Nicolai Hojgaard","Rasmus Hojgaard","Jake Knapp","Matt McCarty",
+  // Amateurs
+  "Jackson Herrington (a)","Mason Howell (a)","Ethan Fang (a)",
+  "Fifa Laopakdee (a)","Mateo Pulcini (a)","Brandon Holtz (a)"
+];
 
 let timers=[], alertsEnabled=false;
 let tracked=JSON.parse(localStorage.getItem('mt26')||'[]');
@@ -598,6 +679,7 @@ function showTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
   if(id==='leaderboard') loadLeaderboard();
+  if(id==='odds') renderOddsBars();
 }
 
 // ── THEME ──────────────────────────────────────────────────────────────────────
