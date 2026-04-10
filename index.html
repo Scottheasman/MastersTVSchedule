@@ -547,10 +547,10 @@ h1{font-size:26px;}
     </table>
   </div>
   <div id="tt-r2" style="display:none;">
-    <p style="font-size:12.5px;color:var(--text-dim);padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border);line-height:1.8;">
-      Round 2 uses <strong style="color:var(--gold);">reversed starting holes</strong> — R1 Hole 1 starters begin on Hole 10 in R2 and vice versa. First groups off at <strong style="color:var(--gold);">7:40 AM ET Friday</strong>.<br><br>
-      Official R2 groupings are released after Round 1 is complete Thursday.<br>Check <strong>Masters.com</strong> for confirmed pairings.
-    </p>
+    <table class="lb-table">
+      <thead><tr><th style="width:90px">Time ET</th><th>Players</th></tr></thead>
+      <tbody id="tt-body-r2"></tbody>
+    </table>
   </div>
   <div id="tt-r34" style="display:none;">
     <p style="font-size:12.5px;color:var(--text-dim);padding:16px;background:var(--surface);border-radius:10px;border:1px solid var(--border);line-height:1.8;">
@@ -605,7 +605,7 @@ h1{font-size:26px;}
       <tr><td class="lb-pos">30</td><td>Sergio Garcia</td><td class="lb-score-over">+15000</td><td class="lb-thru">0.7%</td></tr>
     </tbody>
   </table>
-  <p class="lb-note" style="margin-top:12px;">Odds via BetMGM/DraftKings as of Apr 8, 2026. For entertainment only. Please gamble responsibly. 1-800-GAMBLER.</p>
+  <p class="lb-note" style="margin-top:12px;">Odds via BetMGM/DraftKings as of Apr 8 pre-tournament. Odds shift during play — for live updated odds visit <a href="https://www.covers.com/golf/masters/odds" target="_blank" style="color:var(--gold);">covers.com/golf/masters/odds</a>. For entertainment only. Please gamble responsibly. 1-800-GAMBLER.</p>
 
   <!-- Odds bar chart -->
 
@@ -705,6 +705,7 @@ window.addEventListener('load',()=>{
   tickCountdowns(); setInterval(tickCountdowns,20000);
   tickLive();       setInterval(tickLive,60000);
   renderAlerts();   renderTracked();
+  hidePastDays();
   if(localStorage.getItem('mt26-theme')==='light') applyLight();
 });
 
@@ -740,6 +741,35 @@ function shareApp(){
     const t=document.getElementById('toast');
     t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400);
   });
+}
+
+// ── HIDE PAST DAYS ────────────────────────────────────────────────────────────
+function hidePastDays(){
+  const now = Date.now();
+  // Map day-block index to end-of-day timestamp
+  const dayEnds = [
+    new Date('2026-04-08T23:59:00').getTime(), // Wed
+    new Date('2026-04-09T23:59:00').getTime(), // Thu
+    new Date('2026-04-10T23:59:00').getTime(), // Fri
+    new Date('2026-04-11T23:59:00').getTime(), // Sat
+    new Date('2026-04-12T23:59:00').getTime(), // Sun
+  ];
+  const blocks = document.querySelectorAll('#tab-schedule .day-block');
+  const dividers = document.querySelectorAll('#tab-schedule .day-divider');
+  blocks.forEach((block, i) => {
+    if(dayEnds[i] && now > dayEnds[i]){
+      block.style.display = 'none';
+      if(dividers[i]) dividers[i].style.display = 'none';
+    }
+  });
+  // Also auto-select current round in tee times tab
+  const thu = new Date('2026-04-09T23:59:00').getTime();
+  const fri = new Date('2026-04-10T23:59:00').getTime();
+  if(now > thu && now <= fri){
+    // Auto-switch to R2 tab if it's Friday
+    const r2btn = document.querySelector('#tab-teetimes .map-chip:nth-child(2)');
+    if(r2btn) showRound('r2', r2btn);
+  }
 }
 
 // ── COUNTDOWNS ────────────────────────────────────────────────────────────────
@@ -930,18 +960,70 @@ function buildTeeTimes(){
   }).join('');
 }
 
+
+const TEE_TIMES_R2 = [
+  {t:"7:40 AM",  players:"Samuel Stevens, Sungjae Im"},
+  {t:"7:50 AM",  players:"Andrew Novak, Tom McKibbin, Brian Campbell"},
+  {t:"8:02 AM",  players:"Mike Weir, Wyndham Clark, Mateo Pulcini (A)"},
+  {t:"8:14 AM",  players:"Zach Johnson, Michael Kim, Nicolai Højgaard"},
+  {t:"8:26 AM",  players:"Danny Willett, Davis Riley, Ethan Fang (A)"},
+  {t:"8:38 AM",  players:"Adam Scott, Daniel Berger, Brian Harman"},
+  {t:"8:50 AM",  players:"Fred Couples, Min Woo Lee, Fifa Laopakdee (A)"},
+  {t:"9:02 AM",  players:"Sergio Garcia, Aaron Rai, Jacob Bridgeman"},
+  {t:"9:19 AM",  players:"Harry Hall, Corey Conners, Michael Brennan"},
+  {t:"9:31 AM",  players:"J.J. Spaun, Maverick McNealy, Tyrrell Hatton"},
+  {t:"9:43 AM",  players:"Jon Rahm, Chris Gotterup, Ludvig Åberg", featured:true},
+  {t:"9:55 AM",  players:"Jordan Spieth, Justin Rose, Brooks Koepka", featured:true},
+  {t:"10:07 AM", players:"Sepp Straka, Ben Griffin, Justin Thomas"},
+  {t:"10:19 AM", players:"Scottie Scheffler, Robert MacIntyre, Gary Woodland", featured:true},
+  {t:"10:31 AM", players:"Harris English, Marco Penge, Si Woo Kim"},
+  {t:"10:51 AM", players:"John Keefer, Haotong Li"},
+  {t:"11:03 AM", players:"Naoyuki Kataoka, Max Homa, Carlos Ortiz"},
+  {t:"11:15 AM", players:"José María Olazábal, Rasmus Neergaard-Petersen, Aldrich Potgieter"},
+  {t:"11:27 AM", players:"Angel Cabrera, Sami Valimaki, Jackson Herrington (A)"},
+  {t:"11:39 AM", players:"Charl Schwartzel, Max Greyserman, Ryan Fox"},
+  {t:"11:51 AM", players:"Vijay Singh, Matt McCarty, Rasmus Højgaard"},
+  {t:"12:03 PM", players:"Kurt Kitayama, Kristoffer Reitan, Casey Jarvis"},
+  {t:"12:15 PM", players:"Bubba Watson, Nicolas Echavarria, Brandon Holtz (A)"},
+  {t:"12:32 PM", players:"Cameron Smith, Sam Burns, Jake Knapp"},
+  {t:"12:44 PM", players:"Keegan Bradley, Ryan Gerard, Nick Taylor"},
+  {t:"12:56 PM", players:"Dustin Johnson, Shane Lowry, Jason Day"},
+  {t:"1:08 PM",  players:"Patrick Reed, Tommy Fleetwood, Akshay Bhatia"},
+  {t:"1:20 PM",  players:"Bryson DeChambeau, Matt Fitzpatrick, Xander Schauffele", featured:true},
+  {t:"1:32 PM",  players:"Hideki Matsuyama, Collin Morikawa, Russell Henley", featured:true},
+  {t:"1:44 PM",  players:"Rory McIlroy, Cameron Young, Mason Howell (A)", featured:true},
+  {t:"1:56 PM",  players:"Viktor Hovland, Patrick Cantlay, Alex Noren"},
+];
+
+function buildTeeTimes2(){
+  const tbody=document.getElementById('tt-body-r2');
+  if(!tbody||tbody.innerHTML!=='') return;
+  const sorted=[...TEE_TIMES_R2].sort((a,b)=>timeToMins(a.t)-timeToMins(b.t));
+  tbody.innerHTML=sorted.map(g=>{
+    const feat=g.featured||false;
+    return `<tr data-players="${g.players.toLowerCase()}">
+      <td style="font-weight:700;color:var(--gold);font-size:12px;white-space:nowrap;">${g.t}</td>
+      <td style="font-size:12.5px;">${g.players}${feat?' <span style="font-size:9px;background:rgba(201,168,76,.2);color:var(--gold-light);padding:1px 5px;border-radius:4px;margin-left:4px;">⭐ FEATURED</span>':''}</td>
+    </tr>`;
+  }).join('');
+}
+
 function showRound(id, btn){
   ['r1','r2','r34'].forEach(r=>document.getElementById('tt-'+r).style.display='none');
   document.getElementById('tt-'+id).style.display='block';
   document.querySelectorAll('#tab-teetimes .map-chip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
   if(id==='r1') buildTeeTimes();
+  if(id==='r2') buildTeeTimes2();
 }
 
 function filterTees(){
   const q=document.getElementById('tt-search').value.toLowerCase();
-  document.querySelectorAll('#tt-body-r1 tr').forEach(row=>{
-    row.style.display=(!q||row.getAttribute('data-players').includes(q))?'':'none';
+  ['tt-body-r1','tt-body-r2'].forEach(id=>{
+    const tbody=document.getElementById(id);
+    if(tbody) tbody.querySelectorAll('tr').forEach(row=>{
+      row.style.display=(!q||row.getAttribute('data-players').includes(q))?'':'none';
+    });
   });
 }
 
